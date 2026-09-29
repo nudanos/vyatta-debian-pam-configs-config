@@ -1,9 +1,12 @@
 Source: vyatta-debian-pam-configs-config
-Section: contrib/net
+Section: net
 Priority: optional
-Maintainer: Vyatta Package Maintainers <DL-vyatta-help@att.com>
-Build-Depends: debhelper (>= 9.0.0)
-Standards-Version: 3.9.4
+Maintainer: NuDanOS Maintainers <jon@fernandez.tech>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.7.2
+Rules-Requires-Root: no
+Vcs-Git: https://github.com/nudanos/vyatta-debian-pam-configs-config.git
+Vcs-Browser: https://github.com/nudanos/vyatta-debian-pam-configs-config
 
 Package: vyatta-debian-pam-configs-config
 Architecture: all
