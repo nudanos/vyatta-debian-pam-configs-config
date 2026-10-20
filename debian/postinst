@@ -23,13 +23,11 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-sysconfdir=/opt/vyatta/etc
-
 case "$1" in
     configure)
 	# Fix up PAM configuration for login so that invalid users are prompted
 	# for password
-	sed -i --follow-symlinks 's/requisite[ \t][ \t]*pam_securetty.so/required pam_securetty.so/' $rootfsdir/etc/pam.d/login
+	sed -i --follow-symlinks 's/requisite[ \t][ \t]*pam_securetty.so/required pam_securetty.so/' /etc/pam.d/login
 
 	# Allow non-root users to use passwd command
 	if grep -q 'pam_succeed_if.so' /etc/pam.d/passwd ; then
