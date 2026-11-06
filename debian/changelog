@@ -1,3 +1,9 @@
+vyatta-debian-pam-configs-config (1.13) trixie; urgency=medium
+
+  * Restore only owned PAM diversions and preserve administrator changes.
+
+ -- Jon Fernandez <jon@fernandez.tech>  Fri, 06 Nov 2026 12:00:00 -0700
+
 vyatta-debian-pam-configs-config (1.12) trixie; urgency=medium
 
   * Code-quality lint fixes (distro docs/porting.md): analyzer findings
