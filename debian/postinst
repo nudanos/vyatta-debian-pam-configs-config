@@ -25,13 +25,16 @@ set -e
 
 case "$1" in
     configure)
-	# Fix up PAM configuration for login so that invalid users are prompted
-	# for password
-	sed -i --follow-symlinks 's/requisite[ \t][ \t]*pam_securetty.so/required pam_securetty.so/' /etc/pam.d/login
-
-	# Allow non-root users to use passwd command
-	if grep -q 'pam_succeed_if.so' /etc/pam.d/passwd ; then
-	    sed -i -e '/pam_succeed_if.so/d' /etc/pam.d/passwd
+	# Older versions diverted this profile even when it did not exist.
+	# Restore the registered path without replacing a site-managed file.
+	pkg=vyatta-debian-pam-configs-config
+	path=/usr/share/pam-configs/auditd
+	if [ "$(dpkg-divert --listpackage "$path")" = "$pkg" ]; then
+	    action=--rename
+	    if [ -e "$path" ] || [ -L "$path" ]; then
+		action=--no-rename
+	    fi
+	    dpkg-divert --package "$pkg" --remove "$action" "$path"
 	fi
     ;;
 

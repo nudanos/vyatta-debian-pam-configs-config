@@ -24,20 +24,17 @@ pkg=vyatta-debian-pam-configs-config
 case "$1" in
     install|upgrade)
 	for file in atd cron login sshd; do
-	    if ! [ -e /etc/pam.d/${file}.debian ]; then
-	    	dpkg-divert --package ${pkg} --add --rename \
-			--divert /etc/pam.d/${file}.debian /etc/pam.d/${file}
- 	    fi
-	    if ! [ -L /etc/pam.d/${file} ]; then
-	    	ln -sf /etc/pam.d/${file}.vyatta /etc/pam.d/${file}
- 	    fi
+	    path=/etc/pam.d/$file
+	    owner=$(dpkg-divert --listpackage "$path")
+	    if [ -z "$owner" ] && [ ! -L "$path" ] && [ ! -e "$path.debian" ] && [ ! -L "$path.debian" ]; then
+		dpkg-divert --package "$pkg" --add --rename \
+		    --divert "$path.debian" "$path"
+		owner=$pkg
+	    fi
+	    if [ "$owner" = "$pkg" ] && [ ! -e "$path" ] && [ ! -L "$path" ]; then
+		ln -s "$path.vyatta" "$path"
+	    fi
 	done
-	if ! [ -e /etc/pam.d/auditd.debian ]; then
-	    pam-auth-update --package --remove auditd
-	    dpkg-divert --package ${pkg} --add --rename \
-                --divert /usr/share/pam-configs/auditd.debian \
-	        /usr/share/pam-configs/auditd
- 	fi
     ;;
 
     abort-upgrade)
